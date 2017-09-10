@@ -162,7 +162,7 @@ public:
 
 	void Run()
 	{
-		//Sort();
+		Sort();
 		Draw();
 	}
 };
