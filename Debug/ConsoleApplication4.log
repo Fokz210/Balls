@@ -1,0 +1,7 @@
+﻿  ConsoleApplication4.cpp
+c:\users\иван\documents\visual studio 2017\projects\consoleapplication4\consoleapplication4\consoleapplication4.cpp(108): warning C4100: size: неиспользованный формальный параметр
+c:\users\иван\documents\visual studio 2017\projects\consoleapplication4\consoleapplication4\consoleapplication4.cpp(129): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1772): note:  см. объявление "sprintf"
+c:\users\иван\documents\visual studio 2017\projects\consoleapplication4\consoleapplication4\consoleapplication4.cpp(173): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  ConsoleApplication4.vcxproj -> C:\Users\Иван\Documents\Visual Studio 2017\Projects\ConsoleApplication4\Debug\ConsoleApplication4.exe
+  ConsoleApplication4.vcxproj -> C:\Users\Иван\Documents\Visual Studio 2017\Projects\ConsoleApplication4\Debug\ConsoleApplication4.pdb (Partial PDB)
