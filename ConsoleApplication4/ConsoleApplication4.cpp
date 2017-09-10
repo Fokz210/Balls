@@ -1,13 +1,15 @@
 #include "stdafx.h"
 
-const double DT = 0.01;
+//CONSTANTS AND GLOBAL VALUES
+//type       name            count
+const double DT            = 0.01;
 const int    WINDOW_SIZE_X = 800;
 const int    WINDOW_SIZE_Y = 600;
-      bool   needSort      = true;
 const int    BALLS_COUNT   = 10;
 const int    MAX_VELOCITY  = 500;
-const bool   FULLSCREEN    = true;
 const int    FONT_SIZE     = 25;
+const int    UPD_TIME      = 10;
+const bool   FULLSCREEN    = false;
 
 struct DPOINT
 {
@@ -38,7 +40,6 @@ public:
 			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 192;
 			vel.x = -vel.x;
 			score++;
-			needSort = true;
 		}
 
 		if (pos.y - 10 < 0)
@@ -46,7 +47,6 @@ public:
 			pos.y = radius;
 			vel.y = -vel.y;
 			score++;
-			needSort = true;
 		}
 
 		if (pos.x + radius > WINDOW_SIZE_X)
@@ -54,7 +54,6 @@ public:
 			pos.x = WINDOW_SIZE_X - radius;
 			vel.x = -vel.x;
 			score++;
-			needSort = true;
 		}
 
 		if (pos.y + radius > WINDOW_SIZE_Y)
@@ -62,7 +61,6 @@ public:
 			pos.y = WINDOW_SIZE_Y - radius;
 			vel.y = -vel.y;
 			score++;
-			needSort = true;
 		}
 	}
 
