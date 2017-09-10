@@ -1,8 +1,8 @@
 #include "stdafx.h"
 
 const double dt = 0.01;
-const int WINDOW_SIZE_X = 800;
-const int WINDOW_SIZE_Y = 600;
+const int WINDOW_SIZE_X = 1920;
+const int WINDOW_SIZE_Y = 1080;
 bool needSort = true;
 const int BALLS_COUNT = 10;
 const int MAX_VELOCITY = 5000;
@@ -19,7 +19,7 @@ public:
 	DPOINT pos = { 0, 0 };
 	DPOINT vel = { 0, 0 };
 	double radius = 10;
-	
+
 	int score = 0;
 
 	COLORREF color = TX_BLACK;
@@ -105,7 +105,7 @@ class ScoreBoard
 {
 public:
 	SCORECELL arr[BALLS_COUNT] = {};
-	
+
 	void Refresh(Ball ball[], int size)
 	{
 		for (int i = 0; i < BALLS_COUNT; i++)
@@ -127,7 +127,7 @@ public:
 			txSetFillColor(arr[i].color);
 			txRectangle(0, WINDOW_SIZE_Y / 10 * i, WINDOW_SIZE_X/5, WINDOW_SIZE_Y/10 * i + WINDOW_SIZE_Y / 10);
 			txSetColor(TX_WHITE);
-			sprintf(buff, "Score: %d, id: %d.", arr[i].score, arr[i].id);
+			sprintf(buff, "#%d    Score: %d,   id: %d.", i + 1, arr[i].score, arr[i].id);
 			txDrawText(0, i * WINDOW_SIZE_Y / 10, WINDOW_SIZE_X/5, i * WINDOW_SIZE_Y / 10 + WINDOW_SIZE_Y / 10, buff);
 		}
 	}
@@ -162,7 +162,7 @@ public:
 
 	void Run()
 	{
-		Sort();
+		//Sort();
 		Draw();
 	}
 };
@@ -189,7 +189,7 @@ int main()
 		Board.Run();
 
 		txSetColor(TX_BLACK);
-	
+
 		txSetFillColor(TX_WHITE);
 		txSleep(20);
 		txClear();
