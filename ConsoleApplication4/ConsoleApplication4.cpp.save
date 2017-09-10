@@ -1,13 +1,12 @@
 #include "stdafx.h"
 
-const double DT = 0.01;
-const int    WINDOW_SIZE_X = 100;
-const int    WINDOW_SIZE_Y = 100;
-      bool   needSort      = true;
-const int    BALLS_COUNT   = 10;
-const int    MAX_VELOCITY  = 500;
-const bool   FULLSCREEN    = true;
-const int    FONT_SIZE     = 25;
+const double dt = 0.01;
+const int    WINDOW_SIZE_X = 1920;
+const int    WINDOW_SIZE_Y = 1080;
+      bool   needSort = true;
+const int    BALLS_COUNT = 10;
+const int    MAX_VELOCITY = 5000;
+const bool   FULLSCREEN = true;
 
 struct DPOINT
 {
@@ -30,12 +29,12 @@ public:
 
 	void Physics()
 	{
-		pos.x += vel.x * DT;
-		pos.y += vel.y * DT;
+		pos.x += vel.x * dt;
+		pos.y += vel.y * dt;
 
-		if (pos.x - radius < WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 192)
+		if (pos.x - radius < WINDOW_SIZE_X/5)
 		{
-			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 192;
+			pos.x = radius + WINDOW_SIZE_X/5;
 			vel.x = -vel.x;
 			score++;
 			needSort = true;
@@ -117,8 +116,6 @@ public:
 			arr[i].pos = ball[i].pos;
 			arr[i].color = ball[i].color;
 		}
-
-		Sort();
 	}
 
 	void Draw()
@@ -166,7 +163,7 @@ public:
 
 	void Run()
 	{
-
+		
 		Draw();
 	}
 };
@@ -178,7 +175,7 @@ int main()
 	srand(time(0));
 	Ball balls[BALLS_COUNT];
 	ScoreBoard Board;
-	txSelectFont("Calibri Light", FONT_SIZE);
+	txSelectFont("Calibri Light", 30);
 	int counter = 0;
 
 	while (!GetAsyncKeyState(VK_ESCAPE))
@@ -188,11 +185,9 @@ int main()
 			balls[i].Run();
 		Board.Run();
 
-		txSetColor(TX_ORANGE);
-		txSetFillColor(TX_ORANGE);
-		txRectangle(WINDOW_SIZE_X / 5, 0, WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 192, WINDOW_SIZE_Y);
+		txSetColor(TX_BLACK);
 
-		txSetFillColor(TX_BLACK);
+		txSetFillColor(TX_WHITE);
 		txSleep(20);
 		txClear();
 		txClearConsole();
