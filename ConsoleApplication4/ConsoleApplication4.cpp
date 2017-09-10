@@ -171,6 +171,8 @@ int main()
 {
 	txCreateWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
+	txDisableAutoPause();
+
 	srand(time(0));
 
 	Ball balls[BALLS_COUNT];

@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <tchar.h>
-#include "C:/TX/TX/TXLib.h"
+#include "lib/TXLib.h"
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы
