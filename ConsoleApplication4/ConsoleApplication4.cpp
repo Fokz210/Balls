@@ -1,10 +1,11 @@
 #include "stdafx.h"
 
 const double dt = 0.01;
-const int WSizeX = 800;
-const int WSizeY = 600;
+const int WINDOW_SIZE_X = 800;
+const int WINDOW_SIZE_Y = 600;
 bool needSort = true;
-const int BallCount = 40;
+const int BALLS_COUNT = 10;
+const int MAX_VELOCITY = 5000;
 
 struct DPOINT
 {
@@ -30,9 +31,9 @@ public:
 		pos.x += vel.x * dt;
 		pos.y += vel.y * dt;
 
-		if (pos.x - radius < 200)
+		if (pos.x - radius < WINDOW_SIZE_X/5)
 		{
-			pos.x = radius + 200;
+			pos.x = radius + WINDOW_SIZE_X/5;
 			vel.x = -vel.x;
 			score++;
 			needSort = true;
@@ -46,17 +47,17 @@ public:
 			needSort = true;
 		}
 
-		if (pos.x + radius > WSizeX)
+		if (pos.x + radius > WINDOW_SIZE_X)
 		{
-			pos.x = WSizeX - radius;
+			pos.x = WINDOW_SIZE_X - radius;
 			vel.x = -vel.x;
 			score++;
 			needSort = true;
 		}
 
-		if (pos.y + radius > WSizeY)
+		if (pos.y + radius > WINDOW_SIZE_Y)
 		{
-			pos.y = WSizeY - radius;
+			pos.y = WINDOW_SIZE_Y - radius;
 			vel.y = -vel.y;
 			score++;
 			needSort = true;
@@ -73,11 +74,11 @@ public:
 
 	Ball()
 	{
-		vel.x = rand() % 1000 - 500;
-		vel.y = rand() % 1000 - 500;
+		vel.x = rand() % MAX_VELOCITY / 2 - MAX_VELOCITY;
+		vel.y = rand() % MAX_VELOCITY / 2 - MAX_VELOCITY;
 
-		pos.x = rand() % WSizeX;
-		pos.y = rand() % WSizeY;
+		pos.x = rand() % WINDOW_SIZE_X;
+		pos.y = rand() % WINDOW_SIZE_Y;
 
 		color = RGB(rand() % 255, rand() % 255, rand() % 255);
 
@@ -103,11 +104,11 @@ struct SCORECELL
 class ScoreBoard
 {
 public:
-	SCORECELL arr[BallCount] = {};
+	SCORECELL arr[BALLS_COUNT] = {};
 	
 	void Refresh(Ball ball[], int size)
 	{
-		for (int i = 0; i < BallCount; i++)
+		for (int i = 0; i < BALLS_COUNT; i++)
 		{
 			arr[i].id = ball[i].id;
 			arr[i].score = ball[i].score;
@@ -124,10 +125,10 @@ public:
 		{
 			txSetColor(arr[i].color);
 			txSetFillColor(arr[i].color);
-			txRectangle(0, 60 * i, 200, 60 * i + 59);
+			txRectangle(0, WINDOW_SIZE_Y / 10 * i, WINDOW_SIZE_X/5, WINDOW_SIZE_Y/10 * i + WINDOW_SIZE_Y / 10);
 			txSetColor(TX_WHITE);
 			sprintf(buff, "Score: %d, id: %d.", arr[i].score, arr[i].id);
-			txDrawText(0, i * 60, 200, i * 60 + 61, buff);
+			txDrawText(0, i * WINDOW_SIZE_Y / 10, WINDOW_SIZE_X/5, i * WINDOW_SIZE_Y / 10 + WINDOW_SIZE_Y / 10, buff);
 		}
 	}
 
@@ -146,7 +147,7 @@ public:
 		{
 			sorted = false;
 
-			for (int i = 0; i < BallCount - 1; i++)
+			for (int i = 0; i < BALLS_COUNT - 1; i++)
 			{
 				if (arr[i].score < arr[i + 1].score)
 				{
@@ -168,24 +169,25 @@ public:
 
 int main()
 {
-	txCreateWindow(WSizeX, WSizeY);
+	txCreateWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
 	srand(time(0));
 
-	Ball balls[BallCount];
+	Ball balls[BALLS_COUNT];
 
 	ScoreBoard Board;
 
+	txSelectFont("Calibri Light", 30);
+
 	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
-		Board.Refresh(balls, BallCount);
-		for (int i = 0; i < BallCount; i++)
+		Board.Refresh(balls, BALLS_COUNT);
+		for (int i = 0; i < BALLS_COUNT; i++)
 			balls[i].Run();
 		Board.Run();
 
 		txSetColor(TX_BLACK);
-		txLine(200, 0, 200, 600);
-
+	
 		txSetFillColor(TX_WHITE);
 		txSleep(20);
 		txClear();
