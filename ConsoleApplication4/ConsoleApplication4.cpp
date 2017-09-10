@@ -1,8 +1,8 @@
 #include "stdafx.h"
 
 const double DT = 0.01;
-const int    WINDOW_SIZE_X = 100;
-const int    WINDOW_SIZE_Y = 100;
+const int    WINDOW_SIZE_X = 800;
+const int    WINDOW_SIZE_Y = 600;
       bool   needSort      = true;
 const int    BALLS_COUNT   = 10;
 const int    MAX_VELOCITY  = 500;
