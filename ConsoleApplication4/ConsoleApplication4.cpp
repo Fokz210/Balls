@@ -2,14 +2,23 @@
 
 //CONSTANTS AND GLOBAL VALUES
 //type       name            count
-const double DT            = 0.01;
-const int    WINDOW_SIZE_X = 800;
-const int    WINDOW_SIZE_Y = 600;
+const double DT            = 0.1;
+const int    WINDOW_SIZE_X = 1920;
+const int    WINDOW_SIZE_Y = 1080;
 const int    BALLS_COUNT   = 10;
 const int    MAX_VELOCITY  = 500;
-const int    FONT_SIZE     = 25;
-const int    UPD_TIME      = 10;
+const int    FONT_SIZE     = 40;
+const int    UPD_TIME      = 1;
 const bool   FULLSCREEN    = false;
+
+template < typename T >
+void QuickSort (T data[], int size, int left, int right);
+
+template < typename T >
+void Swap(T balls[], int a, int b);
+
+template < typename T >
+void REV (T data [], int size);
 
 struct DPOINT
 {
@@ -35,9 +44,9 @@ public:
 		pos.x += vel.x * DT;
 		pos.y += vel.y * DT;
 
-		if (pos.x - radius < WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 192)
+		if (pos.x - radius < WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200)
 		{
-			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 192;
+			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200;
 			vel.x = -vel.x;
 			score++;
 		}
@@ -74,16 +83,17 @@ public:
 
 	Ball()
 	{
-		vel.x = rand() % MAX_VELOCITY / 2 - MAX_VELOCITY;
-		vel.y = rand() % MAX_VELOCITY / 2 - MAX_VELOCITY;
+		vel.x = rand() % MAX_VELOCITY - MAX_VELOCITY / 2;
+		vel.y = rand() % MAX_VELOCITY - MAX_VELOCITY / 2;
 
-		pos.x = rand() % WINDOW_SIZE_X;
-		pos.y = rand() % WINDOW_SIZE_Y;
+		pos.x = rand() % (WINDOW_SIZE_X / 5 * 4) + WINDOW_SIZE_X / 5;
+		pos.y = rand() % (WINDOW_SIZE_Y / 5 * 4) + WINDOW_SIZE_Y / 5;
 
-		color = RGB(rand() % 255, rand() % 255, rand() % 255);
+		color = RGB(rand() % 200, rand() % 200, rand() % 200);
 
 		Run();
-		id = rand()%100;
+
+		id = rand()%BALLS_COUNT ;
 	}
 
 	void Run()
@@ -101,10 +111,22 @@ struct SCORECELL
 	COLORREF color;
 };
 
+bool operator > (SCORECELL const & a, SCORECELL const & b)
+    {
+        return b.score < a.score;
+    }
+
+bool operator < (SCORECELL const & a, SCORECELL const & b)
+    {
+        return b.score > a.score;
+    }
+
 class ScoreBoard
 {
 public:
 	SCORECELL arr[BALLS_COUNT] = {};
+
+	int CELL_COUNT = (BALLS_COUNT <= 20) ? BALLS_COUNT : 20;
 
 	void Refresh(Ball ball[], int size)
 	{
@@ -116,55 +138,31 @@ public:
 			arr[i].color = ball[i].color;
 		}
 
-		Sort();
+
+
 	}
 
 	void Draw()
 	{
 		char buff[128] = "";
 
-		for (int i = 0; i < 10; i++)
+
+
+		for (int i = 0; i < CELL_COUNT; i++)
 		{
 			txSetColor(arr[i].color);
 			txSetFillColor(arr[i].color);
-			txRectangle(0, WINDOW_SIZE_Y / 10 * i, WINDOW_SIZE_X/5, WINDOW_SIZE_Y/10 * i + WINDOW_SIZE_Y / 10);
+			txRectangle(0, WINDOW_SIZE_Y / 20 * i, WINDOW_SIZE_X/5, WINDOW_SIZE_Y/20 * i + WINDOW_SIZE_Y / 20);
 			txSetColor(TX_WHITE);
 			sprintf(buff, "#%d    Score: %d,   id: %d.", i + 1, arr[i].score, arr[i].id);
-			txDrawText(0, i * WINDOW_SIZE_Y / 10, WINDOW_SIZE_X/5, i * WINDOW_SIZE_Y / 10 + WINDOW_SIZE_Y / 10, buff);
-		}
-	}
-
-	void swap(SCORECELL balls[], int a, int b)
-	{
-		SCORECELL buff = balls[a];
-		balls[a] = balls[b];
-		balls[b] = buff;
-	}
-
-	void Sort()
-	{
-		bool sorted = false;
-
-		while (true)
-		{
-			sorted = false;
-
-			for (int i = 0; i < BALLS_COUNT - 1; i++)
-			{
-				if (arr[i].score < arr[i + 1].score)
-				{
-					swap(arr, i, i + 1);
-					sorted = true;
-				}
-			}
-
-			if (sorted == false) break;
+			txDrawText(0, i * WINDOW_SIZE_Y / 20, WINDOW_SIZE_X/5, i * WINDOW_SIZE_Y / 20 + WINDOW_SIZE_Y / 20, buff);
 		}
 	}
 
 	void Run()
 	{
-
+        QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
+		REV(arr, BALLS_COUNT);
 		Draw();
 	}
 };
@@ -172,6 +170,7 @@ public:
 int main()
 {
 	txCreateWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+	txBegin();
 	txDisableAutoPause();
 	srand(time(0));
 	Ball balls[BALLS_COUNT];
@@ -181,16 +180,17 @@ int main()
 
 	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
-		if (counter % 10 == 0) Board.Refresh(balls, BALLS_COUNT);
-		for (int i = 0; i < BALLS_COUNT; i++)
-			balls[i].Run();
+		if (counter % UPD_TIME == 0) Board.Refresh(balls, BALLS_COUNT);
+
+		for (int i = 0; i < BALLS_COUNT; i++) balls[i].Run();
 		Board.Run();
 
 		txSetColor(TX_ORANGE);
 		txSetFillColor(TX_ORANGE);
-		txRectangle(WINDOW_SIZE_X / 5, 0, WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 192, WINDOW_SIZE_Y);
 
-		txSetFillColor(TX_BLACK);
+		txRectangle(WINDOW_SIZE_X / 5, 0, WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200, WINDOW_SIZE_Y);
+
+		txSetFillColor(TX_WHITE);
 		txSleep(20);
 		txClear();
 		txClearConsole();
@@ -199,4 +199,59 @@ int main()
 	}
 
     return 0;
+}
+
+template < typename T >
+void QuickSort (T data[], int size, int left, int right)
+{
+    int mid = (left + right)/ 2;
+    int count1 = left;
+    int count2 = right;
+
+    while (count1 <= count2)
+    {
+        while (data[count1] < data[mid])
+        {
+            count1++;
+        }
+
+        while (data[count2] > data[mid])
+        {
+            count2--;
+        }
+
+        if (count1 <= count2)
+            {
+            Swap (data, count1, count2);
+            count1++;
+            count2--;
+            }
+    }
+
+    if (count1 < right)
+    {
+        QuickSort (data, size, count1, right);
+    }
+
+    if (count2 > left)
+    {
+        QuickSort (data, size, left, count2);
+    }
+}
+
+template < typename T >
+void Swap(T balls[], int a, int b)
+{
+    T buff = balls[a];
+    balls[a] = balls[b];
+    balls[b] = buff;
+}
+
+template < typename T >
+void REV (T data [], int size)
+{
+    for(int i = 0; i < size / 2; i++)
+    {
+        Swap(data, i, size - i - 1);
+    }
 }
