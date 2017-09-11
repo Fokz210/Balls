@@ -5,7 +5,7 @@
 const double DT            = 0.1;
 const int    WINDOW_SIZE_X = 800;
 const int    WINDOW_SIZE_Y = 600;
-const int    BALLS_COUNT   = 200;
+const int    BALLS_COUNT   = 10;
 const int    MAX_VELOCITY  = 500;
 const int    FONT_SIZE     = 25;
 const int    UPD_TIME      = 1;
@@ -14,7 +14,7 @@ const bool   FULLSCREEN    = false;
 int          TopId         = 0; //Remove me
 
 template < typename T >
-void QuickSort (T data[], int size, int left, int right);
+void QuickSort (T data[], int Size, int Left, int Right);
 
 template < typename T >
 void Swap(T balls[], int a, int b);
@@ -200,40 +200,42 @@ int main()
 }
 
 template < typename T >
-void QuickSort (T data[], int size, int left, int right)
+void QuickSort (T data[], int Size, int Left, int Right)
 {
-    int mid = (left + right)/ 2;
-    int count1 = left;
-    int count2 = right;
+int mid = (Left + Right)/2;
+    int x = Left;
+    int y = Right;
+    //Scans = 0;
+    //Exchanges = 0;
 
-    while (count1 <= count2)
+    while (x <= y)
     {
-        while (data[count1] < data[mid])
+        while (data[x] < data [mid])
         {
-            count1++;
+            x++;
         }
 
-        while (data[count2] > data[mid])
+        while (data [y] > data [mid])
         {
-            count2--;
+            y--;
         }
 
-        if (count1 <= count2)
-            {
-            Swap (data, count1, count2);
-            count1++;
-            count2--;
-            }
+        if (x <= y)
+        {
+            Swap (data, x, y);
+            x++;
+            y--;
+        }
     }
 
-    if (count1 < right)
+    if (x < Right)
     {
-        QuickSort (data, size, count1, right);
+       QuickSort (data, Size, x, Right);
     }
 
-    if (count2 > left)
+    if (y > Left)
     {
-        QuickSort (data, size, left, count2);
+       QuickSort (data, Size, Left, y);
     }
 }
 
