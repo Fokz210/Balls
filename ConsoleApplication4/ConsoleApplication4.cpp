@@ -202,11 +202,9 @@ int main()
 template < typename T >
 void QuickSort (T data[], int Size, int Left, int Right)
 {
-int mid = (Left + Right)/2;
+    int mid = (Left + Right)/2;
     int x = Left;
     int y = Right;
-    //Scans = 0;
-    //Exchanges = 0;
 
     while (x <= y)
     {
