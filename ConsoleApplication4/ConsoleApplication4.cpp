@@ -1,15 +1,17 @@
 #include "stdafx.h"
 
 //CONSTANTS AND GLOBAL VALUES
-//type       name            count
+//type       name            value
 const double DT            = 0.1;
-const int    WINDOW_SIZE_X = 1920;
-const int    WINDOW_SIZE_Y = 1080;
-const int    BALLS_COUNT   = 10;
+const int    WINDOW_SIZE_X = 800;
+const int    WINDOW_SIZE_Y = 600;
+const int    BALLS_COUNT   = 100;
 const int    MAX_VELOCITY  = 500;
-const int    FONT_SIZE     = 40;
+const int    FONT_SIZE     = 25;
 const int    UPD_TIME      = 1;
 const bool   FULLSCREEN    = false;
+bool         NeedSort      = true;
+int          TopId         = 0;
 
 template < typename T >
 void QuickSort (T data[], int size, int left, int right);
@@ -49,6 +51,7 @@ public:
 			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200;
 			vel.x = -vel.x;
 			score++;
+			NeedSort = true;
 		}
 
 		if (pos.y - 10 < 0)
@@ -56,6 +59,7 @@ public:
 			pos.y = radius;
 			vel.y = -vel.y;
 			score++;
+			NeedSort = true;
 		}
 
 		if (pos.x + radius > WINDOW_SIZE_X)
@@ -63,6 +67,7 @@ public:
 			pos.x = WINDOW_SIZE_X - radius;
 			vel.x = -vel.x;
 			score++;
+			NeedSort = true;
 		}
 
 		if (pos.y + radius > WINDOW_SIZE_Y)
@@ -70,6 +75,7 @@ public:
 			pos.y = WINDOW_SIZE_Y - radius;
 			vel.y = -vel.y;
 			score++;
+			NeedSort = true;
 		}
 	}
 
@@ -78,7 +84,8 @@ public:
 		txSetColor(color);
 		txSetFillColor(color);
 
-		txCircle(pos.x, pos.y, radius);
+		if(id != TopId) txCircle(pos.x, pos.y, radius);
+		else txRectangle(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius);
 	}
 
 	Ball()
@@ -93,7 +100,7 @@ public:
 
 		Run();
 
-		id = rand()%BALLS_COUNT ;
+		id = rand()%(BALLS_COUNT * 10) ;
 	}
 
 	void Run()
@@ -111,16 +118,6 @@ struct SCORECELL
 	COLORREF color;
 };
 
-bool operator > (SCORECELL const & a, SCORECELL const & b)
-    {
-        return b.score < a.score;
-    }
-
-bool operator < (SCORECELL const & a, SCORECELL const & b)
-    {
-        return b.score > a.score;
-    }
-
 class ScoreBoard
 {
 public:
@@ -128,7 +125,7 @@ public:
 
 	int CELL_COUNT = (BALLS_COUNT <= 20) ? BALLS_COUNT : 20;
 
-	void Refresh(Ball ball[], int size)
+	void Refresh(Ball ball[])
 	{
 		for (int i = 0; i < BALLS_COUNT; i++)
 		{
@@ -137,35 +134,43 @@ public:
 			arr[i].pos = ball[i].pos;
 			arr[i].color = ball[i].color;
 		}
-
-
-
 	}
 
 	void Draw()
 	{
 		char buff[128] = "";
 
-
-
 		for (int i = 0; i < CELL_COUNT; i++)
 		{
 			txSetColor(arr[i].color);
 			txSetFillColor(arr[i].color);
-			txRectangle(0, WINDOW_SIZE_Y / 20 * i, WINDOW_SIZE_X/5, WINDOW_SIZE_Y/20 * i + WINDOW_SIZE_Y / 20);
+
+			txRectangle(0, WINDOW_SIZE_Y / 20 * i, WINDOW_SIZE_X  /5, WINDOW_SIZE_Y / 20 * i + WINDOW_SIZE_Y / 20);
+
 			txSetColor(TX_WHITE);
+
 			sprintf(buff, "#%d    Score: %d,   id: %d.", i + 1, arr[i].score, arr[i].id);
-			txDrawText(0, i * WINDOW_SIZE_Y / 20, WINDOW_SIZE_X/5, i * WINDOW_SIZE_Y / 20 + WINDOW_SIZE_Y / 20, buff);
+			txDrawText(0, i * WINDOW_SIZE_Y / 20, WINDOW_SIZE_X / 5, i * WINDOW_SIZE_Y / 20 + WINDOW_SIZE_Y / 20, buff);
 		}
 	}
 
 	void Run()
 	{
-        QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
-		REV(arr, BALLS_COUNT);
+        if (NeedSort)
+        {
+            QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
+            REV(arr, BALLS_COUNT);
+            TopId = arr[0].id;
+
+            NeedSort = false;
+        }
+
 		Draw();
 	}
 };
+
+bool operator > (SCORECELL const & a, SCORECELL const & b);
+bool operator < (SCORECELL const & a, SCORECELL const & b);
 
 int main()
 {
@@ -180,7 +185,7 @@ int main()
 
 	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
-		if (counter % UPD_TIME == 0) Board.Refresh(balls, BALLS_COUNT);
+		if (counter % UPD_TIME == 0) Board.Refresh(balls);
 
 		for (int i = 0; i < BALLS_COUNT; i++) balls[i].Run();
 		Board.Run();
@@ -255,3 +260,14 @@ void REV (T data [], int size)
         Swap(data, i, size - i - 1);
     }
 }
+
+bool operator > (SCORECELL const & a, SCORECELL const & b)
+    {
+        return b.score < a.score;
+    }
+
+bool operator < (SCORECELL const & a, SCORECELL const & b)
+    {
+        return b.score > a.score;
+    }
+

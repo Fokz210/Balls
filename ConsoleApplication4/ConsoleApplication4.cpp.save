@@ -2,14 +2,16 @@
 
 //CONSTANTS AND GLOBAL VALUES
 //type       name            count
-const double DT            = 0.01;
+const double DT            = 0.1;
 const int    WINDOW_SIZE_X = 1920;
 const int    WINDOW_SIZE_Y = 1080;
-const int    BALLS_COUNT   = 10;
+const int    BALLS_COUNT   = 100;
 const int    MAX_VELOCITY  = 500;
 const int    FONT_SIZE     = 40;
-const int    UPD_TIME      = 10;
+const int    UPD_TIME      = 1;
 const bool   FULLSCREEN    = false;
+bool         NeedSort      = true;
+int          TopId         = 0;
 
 template < typename T >
 void QuickSort (T data[], int size, int left, int right);
@@ -18,7 +20,7 @@ template < typename T >
 void Swap(T balls[], int a, int b);
 
 template < typename T >
-void REV (T data [], int size, int left, int right);
+void REV (T data [], int size);
 
 struct DPOINT
 {
@@ -44,11 +46,12 @@ public:
 		pos.x += vel.x * DT;
 		pos.y += vel.y * DT;
 
-		if (pos.x - radius < WINDOW_SIZE_X / 5)
+		if (pos.x - radius < WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200)
 		{
-			pos.x = radius + WINDOW_SIZE_X / 5;
+			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200;
 			vel.x = -vel.x;
 			score++;
+			NeedSort = true;
 		}
 
 		if (pos.y - 10 < 0)
@@ -56,6 +59,7 @@ public:
 			pos.y = radius;
 			vel.y = -vel.y;
 			score++;
+			NeedSort = true;
 		}
 
 		if (pos.x + radius > WINDOW_SIZE_X)
@@ -63,6 +67,7 @@ public:
 			pos.x = WINDOW_SIZE_X - radius;
 			vel.x = -vel.x;
 			score++;
+			NeedSort = true;
 		}
 
 		if (pos.y + radius > WINDOW_SIZE_Y)
@@ -70,6 +75,7 @@ public:
 			pos.y = WINDOW_SIZE_Y - radius;
 			vel.y = -vel.y;
 			score++;
+			NeedSort = true;
 		}
 	}
 
@@ -83,16 +89,17 @@ public:
 
 	Ball()
 	{
-		vel.x = rand() % MAX_VELOCITY / 2 - MAX_VELOCITY;
-		vel.y = rand() % MAX_VELOCITY / 2 - MAX_VELOCITY;
+		vel.x = rand() % MAX_VELOCITY - MAX_VELOCITY / 2;
+		vel.y = rand() % MAX_VELOCITY - MAX_VELOCITY / 2;
 
-		pos.x = rand() % WINDOW_SIZE_X;
-		pos.y = rand() % WINDOW_SIZE_Y;
+		pos.x = rand() % (WINDOW_SIZE_X / 5 * 4) + WINDOW_SIZE_X / 5;
+		pos.y = rand() % (WINDOW_SIZE_Y / 5 * 4) + WINDOW_SIZE_Y / 5;
 
-		color = RGB(rand() % 255, rand() % 255, rand() % 255);
+		color = RGB(rand() % 200, rand() % 200, rand() % 200);
 
 		Run();
-		id = rand()%100;
+
+		id = rand()%(BALLS_COUNT * 10) ;
 	}
 
 	void Run()
@@ -136,24 +143,21 @@ public:
 			arr[i].pos = ball[i].pos;
 			arr[i].color = ball[i].color;
 		}
-
-		QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
-		REV(arr, BALLS_COUNT, 0, BALLS_COUNT + 1);
-
 	}
 
 	void Draw()
 	{
 		char buff[128] = "";
 
-
-
 		for (int i = 0; i < CELL_COUNT; i++)
 		{
 			txSetColor(arr[i].color);
 			txSetFillColor(arr[i].color);
+			
 			txRectangle(0, WINDOW_SIZE_Y / 20 * i, WINDOW_SIZE_X/5, WINDOW_SIZE_Y/20 * i + WINDOW_SIZE_Y / 20);
+			
 			txSetColor(TX_WHITE);
+			
 			sprintf(buff, "#%d    Score: %d,   id: %d.", i + 1, arr[i].score, arr[i].id);
 			txDrawText(0, i * WINDOW_SIZE_Y / 20, WINDOW_SIZE_X/5, i * WINDOW_SIZE_Y / 20 + WINDOW_SIZE_Y / 20, buff);
 		}
@@ -161,7 +165,15 @@ public:
 
 	void Run()
 	{
-
+        if (NeedSort)
+        {
+            QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
+            REV(arr, BALLS_COUNT);
+            TopId = arr[0].id;
+            
+            NeedSort = false;
+        }
+        
 		Draw();
 	}
 };
@@ -189,7 +201,7 @@ int main()
 
 		txRectangle(WINDOW_SIZE_X / 5, 0, WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200, WINDOW_SIZE_Y);
 
-		txSetFillColor(TX_BLACK);
+		txSetFillColor(TX_WHITE);
 		txSleep(20);
 		txClear();
 		txClearConsole();
@@ -248,7 +260,9 @@ void Swap(T balls[], int a, int b)
 
 template < typename T >
 void REV (T data [], int size)
+{
+    for(int i = 0; i < size / 2; i++)
     {
-    for(int i = 0; o
-
+        Swap(data, i, size - i - 1);
     }
+}
