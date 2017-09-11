@@ -5,7 +5,7 @@
 const double DT            = 0.1;
 const int    WINDOW_SIZE_X = 800;
 const int    WINDOW_SIZE_Y = 600;
-const int    BALLS_COUNT   = 20;
+const int    BALLS_COUNT   = 2;
 const int    MAX_VELOCITY  = 500;
 const int    FONT_SIZE     = 25;
 const int    UPD_TIME      = 1;
