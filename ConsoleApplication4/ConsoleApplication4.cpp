@@ -5,12 +5,11 @@
 const double DT            = 0.1;
 const int    WINDOW_SIZE_X = 800;
 const int    WINDOW_SIZE_Y = 600;
-const int    BALLS_COUNT   = 20;
+const int    BALLS_COUNT   = 10000;
 const int    MAX_VELOCITY  = 500;
 const int    FONT_SIZE     = 25;
 const int    UPD_TIME      = 1;
 const bool   FULLSCREEN    = false;
-bool         NeedSort      = true;
 int          TopId         = 0;
 
 template < typename T >
@@ -51,7 +50,6 @@ public:
 			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200;
 			vel.x = -vel.x;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.y - 10 < 0)
@@ -59,7 +57,6 @@ public:
 			pos.y = radius;
 			vel.y = -vel.y;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.x + radius > WINDOW_SIZE_X)
@@ -67,7 +64,6 @@ public:
 			pos.x = WINDOW_SIZE_X - radius;
 			vel.x = -vel.x;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.y + radius > WINDOW_SIZE_Y)
@@ -75,7 +71,6 @@ public:
 			pos.y = WINDOW_SIZE_Y - radius;
 			vel.y = -vel.y;
 			score++;
-			NeedSort = true;
 		}
 	}
 
@@ -168,6 +163,7 @@ public:
 
 bool operator > (SCORECELL const & a, SCORECELL const & b);
 bool operator < (SCORECELL const & a, SCORECELL const & b);
+void NewBall (Ball balls[], int & size, int realsize);
 
 int main()
 {
@@ -180,11 +176,15 @@ int main()
 	txSelectFont("Calibri Light", FONT_SIZE);
 	int counter = 0;
 
+	int size = 1;
+
 	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
 		if (counter % UPD_TIME == 0) Board.Refresh(balls);
 
-		for (int i = 0; i < BALLS_COUNT; i++) balls[i].Run();
+        NewBall(balls, size, BALLS_COUNT);
+
+		for (int i = 0; i < size; i++) balls[i].Run();
 		Board.Run();
 
 		txSetColor(TX_ORANGE);
@@ -268,3 +268,11 @@ bool operator < (SCORECELL const & a, SCORECELL const & b)
     return b.score > a.score;
 }
 
+void NewBall (Ball balls[], int & size, int realsize)
+{
+    if(txMouseButtons() == 1 && size < realsize)
+    {
+        balls[++size].pos.x = txMouseX();
+        balls[  size].pos.y = txMouseY();
+    }
+}

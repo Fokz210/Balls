@@ -5,12 +5,11 @@
 const double DT            = 0.1;
 const int    WINDOW_SIZE_X = 800;
 const int    WINDOW_SIZE_Y = 600;
-const int    BALLS_COUNT   = 100;
+const int    BALLS_COUNT   = 1000;
 const int    MAX_VELOCITY  = 500;
 const int    FONT_SIZE     = 25;
 const int    UPD_TIME      = 1;
 const bool   FULLSCREEN    = false;
-bool         NeedSort      = true;
 int          TopId         = 0;
 
 template < typename T >
@@ -52,7 +51,6 @@ public:
 			vel.x = -vel.x;
 			score++;
 			NeedSort = true;
-			txPlaySound("lo
 		}
 
 		if (pos.y - 10 < 0)
@@ -60,7 +58,6 @@ public:
 			pos.y = radius;
 			vel.y = -vel.y;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.x + radius > WINDOW_SIZE_X)
@@ -68,7 +65,6 @@ public:
 			pos.x = WINDOW_SIZE_X - radius;
 			vel.x = -vel.x;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.y + radius > WINDOW_SIZE_Y)
@@ -76,7 +72,6 @@ public:
 			pos.y = WINDOW_SIZE_Y - radius;
 			vel.y = -vel.y;
 			score++;
-			NeedSort = true;
 		}
 	}
 
@@ -150,21 +145,18 @@ public:
 
 			txSetColor(TX_WHITE);
 
-			sprintf(buff, "#%d    Score: %d.", i + 1, arr[i].score, arr[i].id);
+			sprintf(buff, "#%d    Score: %d.", i + 1, arr[i].score);
 			txDrawText(0, i * WINDOW_SIZE_Y / 20, WINDOW_SIZE_X / 5, i * WINDOW_SIZE_Y / 20 + WINDOW_SIZE_Y / 20, buff);
 		}
 	}
 
 	void Run()
 	{
-        if (NeedSort)
-        {
-            QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
-            REV(arr, BALLS_COUNT);
-            TopId = arr[0].id;
 
-            NeedSort = false;
-        }
+        QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
+        REV(arr, BALLS_COUNT);
+        TopId = arr[0].id;
+
 
 		Draw();
 	}
@@ -172,6 +164,7 @@ public:
 
 bool operator > (SCORECELL const & a, SCORECELL const & b);
 bool operator < (SCORECELL const & a, SCORECELL const & b);
+void NewBall (Ball balls[], int & size, int realsize);
 
 int main()
 {
@@ -183,6 +176,8 @@ int main()
 	ScoreBoard Board;
 	txSelectFont("Calibri Light", FONT_SIZE);
 	int counter = 0;
+	
+	int size = 1;
 
 	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
@@ -272,3 +267,11 @@ bool operator < (SCORECELL const & a, SCORECELL const & b)
     return b.score > a.score;
 }
 
+void NewBall (Ball balls[], int & size, int realsize)
+{
+    if(txMouseButtons() == 1 && size < realsize) 
+    {
+        balls[++size].x = txMouseX();
+        balls[  size].y = txMouseY();
+    }
+}
