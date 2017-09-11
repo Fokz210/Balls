@@ -149,7 +149,7 @@ public:
 
 			txSetColor(TX_WHITE);
 
-			sprintf(buff, "#%d    Score: %d,   id: %d.", i + 1, arr[i].score, arr[i].id);
+			sprintf(buff, "#%d    Score: %d.", i + 1, arr[i].score, arr[i].id);
 			txDrawText(0, i * WINDOW_SIZE_Y / 20, WINDOW_SIZE_X / 5, i * WINDOW_SIZE_Y / 20 + WINDOW_SIZE_Y / 20, buff);
 		}
 	}
@@ -262,12 +262,12 @@ void REV (T data [], int size)
 }
 
 bool operator > (SCORECELL const & a, SCORECELL const & b)
-    {
-        return b.score < a.score;
-    }
+{
+    return b.score < a.score;
+}
 
 bool operator < (SCORECELL const & a, SCORECELL const & b)
-    {
-        return b.score > a.score;
-    }
+{
+    return b.score > a.score;
+}
 
