@@ -5,7 +5,7 @@
 const double DT            = 0.1;
 const int    WINDOW_SIZE_X = 800;
 const int    WINDOW_SIZE_Y = 600;
-const int    BALLS_COUNT   = 100;
+const int    BALLS_COUNT   = 2;
 const int    MAX_VELOCITY  = 500;
 const int    FONT_SIZE     = 25;
 const int    UPD_TIME      = 1;
@@ -156,14 +156,11 @@ public:
 
 	void Run()
 	{
-        if (NeedSort)
-        {
-            QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
-            REV(arr, BALLS_COUNT);
-            TopId = arr[0].id;
 
-            NeedSort = false;
-        }
+        QuickSort(arr, BALLS_COUNT, 0, BALLS_COUNT - 1);
+        REV(arr, BALLS_COUNT);
+        TopId = arr[0].id;
+
 
 		Draw();
 	}
