@@ -10,8 +10,8 @@ const int    MAX_VELOCITY  = 500;
 const int    FONT_SIZE     = 25;
 const int    UPD_TIME      = 1;
 const bool   FULLSCREEN    = false;
-bool         NeedSort      = true;
-int          TopId         = 0;
+
+int          TopId         = 0; //Remove me
 
 template < typename T >
 void QuickSort (T data[], int size, int left, int right);
@@ -51,7 +51,6 @@ public:
 			pos.x = radius + WINDOW_SIZE_X / 5 + WINDOW_SIZE_X / 200;
 			vel.x = -vel.x;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.y - 10 < 0)
@@ -59,7 +58,6 @@ public:
 			pos.y = radius;
 			vel.y = -vel.y;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.x + radius > WINDOW_SIZE_X)
@@ -67,7 +65,6 @@ public:
 			pos.x = WINDOW_SIZE_X - radius;
 			vel.x = -vel.x;
 			score++;
-			NeedSort = true;
 		}
 
 		if (pos.y + radius > WINDOW_SIZE_Y)
@@ -75,7 +72,6 @@ public:
 			pos.y = WINDOW_SIZE_Y - radius;
 			vel.y = -vel.y;
 			score++;
-			NeedSort = true;
 		}
 	}
 
