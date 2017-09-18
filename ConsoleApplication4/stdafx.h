@@ -6,9 +6,10 @@
 #pragma once
 
 #include "targetver.h"
-
+#include <vector>
 #include <stdio.h>
 #include <tchar.h>
+
 #include "lib/TXLib.h"
 
 
