@@ -7,11 +7,11 @@ public:
 	~Ball();
 	void run();
 	void setTopId(int topId);
+	void setAnimation(HDC animation, POINT animationSize, int animationLength);
 	int getId();
 	int getScore();
 	DPOINT getPos();
 	COLORREF getColor();
-	void setAnimation(HDC animation, POINT animationSize, int animationLength);
 	
 private:
 	void physics();

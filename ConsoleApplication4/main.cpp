@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "stdafx.h"
 
 #include "DPOINT.h"
@@ -14,10 +16,10 @@ int main()
 	const int    BALLS_COUNT = 50;
 	const int    MAX_VELOCITY = 10;
 
-	txCreateWindow(800, 600);
+	txCreateWindow(1200, 1000);
 	txBegin();
 	txDisableAutoPause();
-	srand(time(0));
+	srand((unsigned int)time(0));
 	std::vector<Ball> balls;
 
 	for (int i = 0; i < BALLS_COUNT; i++)
@@ -191,7 +193,7 @@ void Ball::physics()
 		score_++;
 	}
 
-	if (pos_.y - 10 < 0)
+	if (pos_.y - radius_ < 0)
 	{
 		pos_.y = radius_;
 		vel_.y = -vel_.y;
@@ -219,8 +221,8 @@ void Ball::draw()
 
 	if (globalCounter_ % 3 == 0) counter++;
 
-	txSetColor(color_);
-	txSetFillColor(color_);
+	txSetColor(color_, 3);
+	txSetFillColor(TX_WHITE);
 
 	if (id_ != topId_) txCircle(pos_.x, pos_.y, radius_);
 	else txRectangle(pos_.x - radius_, pos_.y - radius_, pos_.x + radius_, pos_.y + radius_);

@@ -1,7 +1,9 @@
 ﻿X:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: промежуточный каталог (x64\Debug\) содержит файлы, которые используются совместно с другим проектом (ConsoleApplication4.vcxproj).  Это может привести к ошибкам очистки и перестроения.
   main.cpp
-c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(20): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(175): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(1): warning C4603: _CRT_SECURE_NO_WARNINGS: макрос не определен или определение изменилось после использования предкомпилированного заголовка
+  c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(1): note: Добавление макроопределения в предкомпилированный заголовок вместо определения его здесь
+  c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(3): note: использование предварительно скомпилированного заголовка
+c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(177): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1772): note:  см. объявление "sprintf"
   ConsoleApplication4.vcxproj -> C:\Users\chere\OneDrive\Документы\GitHub\Balls\x64\Debug\Balls.exe
   ConsoleApplication4.vcxproj -> C:\Users\chere\OneDrive\Документы\GitHub\Balls\x64\Debug\Balls.pdb (Partial PDB)
