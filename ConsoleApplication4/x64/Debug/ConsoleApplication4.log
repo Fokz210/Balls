@@ -1,9 +1,7 @@
 ﻿X:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: промежуточный каталог (x64\Debug\) содержит файлы, которые используются совместно с другим проектом (ConsoleApplication4.vcxproj).  Это может привести к ошибкам очистки и перестроения.
-  Balls.cpp
-c:\users\chere\onedrive\документы\github\balls\consoleapplication4\balls.cpp(141): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  main.cpp
+c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(20): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+c:\users\chere\onedrive\документы\github\balls\consoleapplication4\main.cpp(175): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1772): note:  см. объявление "sprintf"
-c:\users\chere\onedrive\документы\github\balls\consoleapplication4\balls.cpp(182): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-c:\users\chere\onedrive\документы\github\balls\consoleapplication4\balls.cpp(285): warning C4100: MAX_VEL: неиспользованный формальный параметр
-c:\users\chere\onedrive\документы\github\balls\consoleapplication4\balls.cpp(285): warning C4100: size: неиспользованный формальный параметр
   ConsoleApplication4.vcxproj -> C:\Users\chere\OneDrive\Документы\GitHub\Balls\x64\Debug\Balls.exe
   ConsoleApplication4.vcxproj -> C:\Users\chere\OneDrive\Документы\GitHub\Balls\x64\Debug\Balls.pdb (Partial PDB)
